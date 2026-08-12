@@ -1,0 +1,33 @@
+# Python environment
+venv/
+.python-version
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# SQLite database and meal images
+data/app.db
+data/meal_images/
+
+# Streamlit secrets/local config
+.env
+.streamlit/secrets.toml
+
+# OS files
+.DS_Store
+.idea/
+.vscode/
+
+# Packaging
+*.egg-info/
+*.egg
+dist/
+build/
+
+# PyCharm
+*.iml
+
+# Logs
+*.log
