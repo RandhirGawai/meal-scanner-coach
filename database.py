@@ -55,7 +55,13 @@ ALL_TABLES = ["profile", "meals", "body_metrics", "activity"]
 def get_conn():
     """Context manager so every caller gets a fresh connection that always closes."""
     if USE_TURSO:
-        import libsql
+        try:
+            import libsql
+        except ImportError as exc:
+            raise ImportError(
+                "Turso is enabled but the required package 'libsql' is not installed. "
+                "Add 'libsql>=0.1.11' to requirements.txt and redeploy."
+            ) from exc
         conn = libsql.connect(database=TURSO_DATABASE_URL, auth_token=TURSO_AUTH_TOKEN)
     else:
         import sqlite3
