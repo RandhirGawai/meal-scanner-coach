@@ -302,13 +302,13 @@ with tab_scan:
             col_save, col_restart = st.columns([2, 1])
             if col_save.button("✅ Save Meal", type="primary", use_container_width=True):
                 img = st.session_state.get("last_image")
-                img_path = utils.save_meal_image(img, sel_date) if img is not None else None
+                image_base64 = utils.image_to_base64(img) if img is not None else None
                 confidence_label = "Manual entry" if stage == "manual" else result.get("confidence", "Medium")
                 db.add_meal(
                     log_date=sel_date,
                     log_time=datetime.now().strftime("%H:%M"),
                     meal_type=st.session_state.get("last_meal_type", meal_type),
-                    image_path=img_path,
+                    image_base64=image_base64,
                     foods=foods,
                     calories=cal, protein_g=pro, carbs_g=carb, fat_g=fat, fiber_g=fiber,
                     confidence=confidence_label,
@@ -336,9 +336,9 @@ with tab_scan:
             with st.expander(f"{m['meal_type']} · {m['log_time']} · {utils.fmt(m['calories'])} kcal"):
                 col_a, col_b = st.columns([1, 2])
                 with col_a:
-                    if m["image_path"]:
+                    if m.get("image_base64"):
                         try:
-                            st.image(m["image_path"], use_container_width=True)
+                            st.image(utils.image_from_base64(m["image_base64"]), use_container_width=True)
                         except Exception:
                             pass
                 with col_b:
